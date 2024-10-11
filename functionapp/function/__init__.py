@@ -1,6 +1,7 @@
 import logging
 import azure.functions as func
 import subprocess
+import os
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function received a request.')
@@ -26,8 +27,16 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         # Log the extracted parameters
         logging.info(f"domain: {domain}, output_type: {output_type}")
 
-        # Example: Prepare the command-line arguments to pass to your script
-        command = ['python3', '../dnstwist/dnstwist.py', '-r -w -d ../dnstwist/dictionaries/common_tlds.dict -f', output_type,  domain]
+        # Define paths for dnstwist script and dictionaries
+        script_path = os.path.join(os.getenv('HOME', '/home/site/wwwroot'), 'functionapp/dnstwist/dnstwist.py')
+        dict_path = os.path.join(os.getenv('HOME', '/home/site/wwwroot'), 'functionapp/dnstwist/dictionaries/common_tlds.dict')
+
+        # Prepare the command-line arguments to pass to your script
+        command = [
+            'python3', script_path,
+            '-r', '-w', '-d', dict_path,
+            '-f', output_type, domain
+        ]
 
         # Execute the command using subprocess and capture the output
         result = subprocess.run(command, capture_output=True, text=True)
