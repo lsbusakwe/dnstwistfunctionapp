@@ -27,7 +27,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         logging.info(f"domain: {domain}, output_type: {output_type}")
 
         # Example: Prepare the command-line arguments to pass to your script
-        command = ['python3', 'dnstwist.py', '-r -w -f', output_type,  domain]
+        command = ['python3', 'dnstwist/dnstwist.py', '-r -w -f', output_type,  domain]
 
         # Execute the command using subprocess and capture the output
         result = subprocess.run(command, capture_output=True, text=True)
